@@ -9,7 +9,6 @@ module.exports = {
       option
         .setName('turg')
         .setDescription('vali turg')
-
         .addChoices(
           { name: 'Tallinna Börs', value: 'TALLINN' },
           { name: 'Riia Börs', value: 'RIGA' },
