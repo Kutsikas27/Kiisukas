@@ -51,18 +51,40 @@ module.exports = {
 
     const body = await dictResult.body.json();
     const rannad = body.beaches;
-    const rannaNimi = interaction.options.getSubcommand('rand');
+    let description;
 
-    const description = rannad
-      .filter((el) => el.name.includes(rannaNimi))
-      .map((item) => {
-        let emoji = '<:green:1101471005312024667>';
+    if (interaction.options.getSubcommand() === 'rand') {
+      const rannaNimi = interaction.options.getString('rand');
+      const rand = rannad.find((el) => el.name === rannaNimi);
+      const emoji =
+        rand.flag === 'Yellow'
+          ? '<:yellow:1101471020860313640>'
+          : rand.flag === 'Red'
+          ? '<:green:1101471005312024667>'
+          : '<:red:1101471038132465724>';
+      const waterTemp = rand.water_temp ?? '-';
+      const airTemp = rand.air_temp ?? '-';
+      const people = rand.peoples ?? '-';
+      description = ` ${emoji} **${rand.name}** õhk: **${airTemp}** °C vesi: **${waterTemp}** °C  inimesi: ~ **${people}** `;
+    }
 
-        if (item.flag === 'Yellow') emoji = '<:yellow:1101471020860313640>';
-        if (item.flag === 'Red') emoji = '<:red:1101471038132465724>';
-        return ` ${emoji} **${item.name}** õhk: **${item.air_temp}**°C vesi: **${item.water_temp}**°C  inimesi: ~ **${item.peoples}**°C `;
-      })
-      .join('\n');
+    if (interaction.options.getSubcommand() === 'rannad') {
+      description = rannad
+        .filter((el) => el.name !== null)
+        .map((item) => {
+          const emoji =
+            item.flag === 'Yellow'
+              ? '<:yellow:1101471020860313640>'
+              : item.flag === 'Red'
+              ? '<:green:1101471005312024667>'
+              : '<:red:1101471038132465724>';
+          const waterTemp = item.water_temp ?? '-';
+          const airTemp = item.air_temp ?? '-';
+          const people = item.peoples ?? '-';
+          return ` ${emoji} **${item.name}** õhk: **${waterTemp} **°C vesi: **${airTemp} **°C  inimesi: **${people}** `;
+        })
+        .join('\n');
+    }
 
     const embed = new EmbedBuilder()
       .setColor(0xef0f00)
