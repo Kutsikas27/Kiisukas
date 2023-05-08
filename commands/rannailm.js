@@ -62,10 +62,13 @@ module.exports = {
           : rand.flag === 'Red'
           ? '<:green:1101471005312024667>'
           : '<:red:1101471038132465724>';
-      const waterTemp = rand.water_temp ?? '-';
-      const airTemp = rand.air_temp ?? '-';
-      const people = rand.peoples ?? '-';
-      description = ` ${emoji} **${rand.name}** õhk: **${airTemp}** °C vesi: **${waterTemp}** °C  inimesi: ~ **${people}** `;
+      if (rand.water_temp === null)
+        description = `${emoji} **${rand.name}**: andmed puuduvad`;
+      else {
+        const aeg = new Date(parseInt(rand.timestamp) * 1000);
+
+        description = ` ${emoji} ${aeg} **${rand.name}** õhk: **${rand.air_temp}** °C vesi: **${rand.water_temp}** °C  inimesi: ~ **${rand.peoples}** `;
+      }
     }
 
     if (interaction.options.getSubcommand() === 'rannad') {
@@ -78,10 +81,11 @@ module.exports = {
               : item.flag === 'Red'
               ? '<:green:1101471005312024667>'
               : '<:red:1101471038132465724>';
-          const waterTemp = item.water_temp ?? '-';
-          const airTemp = item.air_temp ?? '-';
-          const people = item.peoples ?? '-';
-          return ` ${emoji} **${item.name}** õhk: **${waterTemp} **°C vesi: **${airTemp} **°C  inimesi: **${people}** `;
+          if (item.water_temp === null)
+            return (description = `${emoji} **${item.name}**: andmed puuduvad`);
+          else {
+            return ` ${emoji} **${item.name}** õhk: **${item.air_temp}} **°C vesi: **${item.water_temp} **°C  inimesi: **${item.peoples}** `;
+          }
         })
         .join('\n');
     }
