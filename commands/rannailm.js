@@ -1,6 +1,13 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { request } = require('undici');
 
+const flagMap = {
+  Yellow: '<:yellow:1101471020860313640>',
+  Red: '<:red:1101471038132465724>',
+  Green: '<:green:1101471005312024667>',
+  Purple: '<:purple:1105437530368778300>',
+  Default: '<:grey:1105458610126987355>',
+};
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('rannailm')
@@ -56,18 +63,12 @@ module.exports = {
     if (interaction.options.getSubcommand() === 'rand') {
       const rannaNimi = interaction.options.getString('rand');
       const rand = rannad.find((el) => el.name === rannaNimi);
-      const emoji =
-        rand.flag === 'Yellow'
-          ? '<:yellow:1101471020860313640>'
-          : rand.flag === 'Red'
-          ? '<:green:1101471005312024667>'
-          : '<:red:1101471038132465724>';
-      if (rand.water_temp === null)
-        description = `${emoji} **${rand.name}**: andmed puuduvad`;
-      else {
-        const aeg = new Date(parseInt(rand.timestamp) * 1000);
+      const flag = flagMap[rand.flag] || flagMap.Default;
 
-        description = ` ${emoji} ${aeg} **${rand.name}** õhk: **${rand.air_temp}** °C vesi: **${rand.water_temp}** °C  inimesi: ~ **${rand.peoples}** `;
+      if (rand.water_temp === null)
+        description = `${flag} **${rand.name}**: andmed puuduvad`;
+      else {
+        description = ` ${flag} ${rand.day_only} ${rand.time}: **${rand.name}** õhk: **${rand.air_temp}** °C vesi: **${rand.water_temp}** °C  inimesi: ~ **${rand.peoples}** `;
       }
     }
 
@@ -75,23 +76,18 @@ module.exports = {
       description = rannad
         .filter((el) => el.name !== null)
         .map((item) => {
-          const emoji =
-            item.flag === 'Yellow'
-              ? '<:yellow:1101471020860313640>'
-              : item.flag === 'Red'
-              ? '<:green:1101471005312024667>'
-              : '<:red:1101471038132465724>';
+          const flag = flagMap[item.flag] || flagMap.Default;
           if (item.water_temp === null)
-            return (description = `${emoji} **${item.name}**: andmed puuduvad`);
+            return (description = `${flag} **${item.name}**: andmed puuduvad`);
           else {
-            return ` ${emoji} **${item.name}** õhk: **${item.air_temp}} **°C vesi: **${item.water_temp} **°C  inimesi: **${item.peoples}** `;
+            return ` ${flag} **${item.name}** õhk: **${item.air_temp} **°C vesi: **${item.water_temp} **°C  inimesi: **${item.peoples}** `;
           }
         })
         .join('\n');
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0xef0f00)
+      .setColor(0x1abc9c)
       .setDescription(description);
 
     interaction.followUp({ embeds: [embed] });
