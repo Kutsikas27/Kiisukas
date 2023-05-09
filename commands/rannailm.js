@@ -68,7 +68,7 @@ module.exports = {
       if (rand.water_temp === null)
         description = `${flag} **${rand.name}**: andmed puuduvad`;
       else {
-        description = ` ${flag} ${rand.day_only} ${rand.time}: **${rand.name}** õhk: **${rand.air_temp}** °C vesi: **${rand.water_temp}** °C  inimesi: ~ **${rand.peoples}** `;
+        description = ` ${flag} **${rand.day_only} ${rand.time} ${rand.name}** õhk: **${rand.air_temp}** °C vesi: **${rand.water_temp}** °C  inimesi: ~ **${rand.peoples}** `;
       }
     }
 
@@ -80,7 +80,7 @@ module.exports = {
           if (item.water_temp === null)
             return (description = `${flag} **${item.name}**: andmed puuduvad`);
           else {
-            return ` ${flag} **${item.name}** õhk: **${item.air_temp} **°C vesi: **${item.water_temp} **°C  inimesi: **${item.peoples}** `;
+            return ` ${flag} **${item.day_only} ${item.time} ${item.name}** õhk: **${item.air_temp} **°C vesi: **${item.water_temp} **°C  inimesi: **${item.peoples}** `;
           }
         })
         .join('\n');
