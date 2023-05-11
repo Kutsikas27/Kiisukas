@@ -8,6 +8,27 @@ const flagMap = {
   Purple: '<:purple:1105437530368778300>',
   Default: '<:grey:1105458610126987355>',
 };
+const getOneBeachDescription = (rannaNimi, rannad) => {
+  const rand = rannad.find((el) => el.name === rannaNimi);
+
+  return getBeachRow(rand);
+};
+
+const getBeachList = (rannad) => {
+  return rannad
+    .filter((el) => el.name !== null)
+    .map(getBeachRow)
+    .join('\n');
+};
+const getBeachRow = (beach) => {
+  const flag = flagMap[beach.flag] || flagMap.Default;
+  if (beach.water_temp === null)
+    return `${flag} **${beach.name}**: andmed puuduvad`;
+  else {
+    return ` ${flag} **${beach.day_only} ${beach.time} ${beach.name}** õhk: **${beach.air_temp} **°C vesi: **${beach.water_temp} **°C  inimesi: **${beach.peoples}** `;
+  }
+};
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('rannailm')
@@ -59,34 +80,12 @@ module.exports = {
     const body = await dictResult.body.json();
     const rannad = body.beaches;
 
-    getBeachRow = (beach) => {
-      const flag = flagMap[beach.flag] || flagMap.Default;
-      if (beach.water_temp === null)
-        return `${flag} **${beach.name}**: andmed puuduvad`;
-      else {
-        return ` ${flag} **${beach.day_only} ${beach.time} ${beach.name}** õhk: **${beach.air_temp} **°C vesi: **${beach.water_temp} **°C  inimesi: **${beach.peoples}** `;
-      }
-    };
-
-    funktsioonNr1 = (rannaNimi, rannad) => {
-      const rand = rannad.find((el) => el.name === rannaNimi);
-
-      return getBeachRow(rand);
-    };
-
-    funktsioonNr2 = (rannad) => {
-      return rannad
-        .filter((el) => el.name !== null)
-        .map(getBeachRow)
-        .join('\n');
-    };
-
     const subCommand = interaction.options.getSubcommand();
     const rannaNimi = interaction.options.getString('rand');
     const description =
       subCommand === 'rand'
-        ? funktsioonNr1(rannaNimi, rannad)
-        : funktsioonNr2(rannad);
+        ? getOneBeachDescription(rannaNimi, rannad)
+        : getBeachList(rannad);
 
     const embed = new EmbedBuilder()
       .setColor(0x1abc9c)
