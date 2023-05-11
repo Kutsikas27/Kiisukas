@@ -8,14 +8,14 @@ const flagMap = {
   Purple: '<:purple:1105437530368778300>',
   Default: '<:grey:1105458610126987355>',
 };
-const getOneBeachDescription = (rannaNimi, rannad) => {
-  const rand = rannad.find((el) => el.name === rannaNimi);
+const getOneBeachDescription = (searchString, beaches) => {
+  const rand = beaches.find((el) => el.name === searchString);
 
   return getBeachRow(rand);
 };
 
-const getBeachList = (rannad) => {
-  return rannad
+const getBeachListDescription = (beaches) => {
+  return beaches
     .filter((el) => el.name !== null)
     .map(getBeachRow)
     .join('\n');
@@ -68,24 +68,23 @@ module.exports = {
         ),
     )
     .addSubcommand((subcommand) =>
-      subcommand.setName('rannad').setDescription('näita kõiki randu'),
+      subcommand.setName('beaches').setDescription('näita kõiki randu'),
     ),
 
   async execute(interaction) {
     await interaction.deferReply();
-    const dictResult = await request(
+    const result = await request(
       'https://www.g4s.ee/beachesweather2.php?format=json&lang=&extended=true',
     );
 
-    const body = await dictResult.body.json();
-    const rannad = body.beaches;
+    const { beaches } = await result.body.json();
 
     const subCommand = interaction.options.getSubcommand();
-    const rannaNimi = interaction.options.getString('rand');
+    const searchString = interaction.options.getString('rand');
     const description =
       subCommand === 'rand'
-        ? getOneBeachDescription(rannaNimi, rannad)
-        : getBeachList(rannad);
+        ? getOneBeachDescription(searchString, beaches)
+        : getBeachListDescription(beaches);
 
     const embed = new EmbedBuilder()
       .setColor(0x1abc9c)
