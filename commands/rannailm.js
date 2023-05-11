@@ -58,33 +58,35 @@ module.exports = {
 
     const body = await dictResult.body.json();
     const rannad = body.beaches;
-    let description;
 
-    if (interaction.options.getSubcommand() === 'rand') {
-      const rannaNimi = interaction.options.getString('rand');
-      const rand = rannad.find((el) => el.name === rannaNimi);
-      const flag = flagMap[rand.flag] || flagMap.Default;
-
-      if (rand.water_temp === null)
-        description = `${flag} **${rand.name}**: andmed puuduvad`;
+    getBeachRow = (beach) => {
+      const flag = flagMap[beach.flag] || flagMap.Default;
+      if (beach.water_temp === null)
+        return `${flag} **${beach.name}**: andmed puuduvad`;
       else {
-        description = ` ${flag} **${rand.day_only} ${rand.time} ${rand.name}** õhk: **${rand.air_temp}** °C vesi: **${rand.water_temp}** °C  inimesi: ~ **${rand.peoples}** `;
+        return ` ${flag} **${beach.day_only} ${beach.time} ${beach.name}** õhk: **${beach.air_temp} **°C vesi: **${beach.water_temp} **°C  inimesi: **${beach.peoples}** `;
       }
-    }
+    };
 
-    if (interaction.options.getSubcommand() === 'rannad') {
-      description = rannad
+    funktsioonNr1 = (rannaNimi, rannad) => {
+      const rand = rannad.find((el) => el.name === rannaNimi);
+
+      return getBeachRow(rand);
+    };
+
+    funktsioonNr2 = (rannad) => {
+      return rannad
         .filter((el) => el.name !== null)
-        .map((item) => {
-          const flag = flagMap[item.flag] || flagMap.Default;
-          if (item.water_temp === null)
-            return (description = `${flag} **${item.name}**: andmed puuduvad`);
-          else {
-            return ` ${flag} **${item.day_only} ${item.time} ${item.name}** õhk: **${item.air_temp} **°C vesi: **${item.water_temp} **°C  inimesi: **${item.peoples}** `;
-          }
-        })
+        .map(getBeachRow)
         .join('\n');
-    }
+    };
+
+    const subCommand = interaction.options.getSubcommand();
+    const rannaNimi = interaction.options.getString('rand');
+    const description =
+      subCommand === 'rand'
+        ? funktsioonNr1(rannaNimi, rannad)
+        : funktsioonNr2(rannad);
 
     const embed = new EmbedBuilder()
       .setColor(0x1abc9c)
