@@ -2,6 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const sendMessageInterval = require('./jobs/joblinks');
 
 require('dotenv').config();
 
@@ -59,3 +60,12 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args));
   }
 }
+
+const MESSAGE_INTERVAL = 60;
+client.on('ready', () => {
+  sendMessageInterval(
+    client,
+    process.env.SECONDARY_CHANNEL_ID,
+    MESSAGE_INTERVAL,
+  );
+});
