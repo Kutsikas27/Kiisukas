@@ -1,31 +1,12 @@
-// Require the necessary discord.js classes
+require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const sendMessageInterval = require('./jobs/joblinks');
+const { Collection } = require('discord.js');
+const client = require('./bot');
 
-require('dotenv').config();
-
-// Create a new client instance
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildPresences,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers,
-  ],
-});
-
-// When the client is ready, run this code (only once)
-// We use 'c' for the event parameter to keep it separate from the already defined 'client'
-
-// Log in to Discord with your client's token
-client.login(process.env.BOT_TOKEN);
-
+require('./jobs');
+// @ts-ignore
 client.commands = new Collection();
-
-// commandid
 
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs
@@ -35,8 +16,9 @@ const commandFiles = fs
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
   const command = require(filePath);
-  // Set a new item in the Collection with the key as the command name and the value as the exported module
+
   if ('data' in command && 'execute' in command) {
+    // @ts-ignore
     client.commands.set(command.data.name, command);
   } else {
     console.log(
@@ -45,7 +27,6 @@ for (const file of commandFiles) {
   }
 }
 
-// evendid
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs
   .readdirSync(eventsPath)
@@ -60,12 +41,3 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args));
   }
 }
-
-const MESSAGE_INTERVAL = 60;
-client.on('ready', () => {
-  sendMessageInterval(
-    client,
-    process.env.SECONDARY_CHANNEL_ID,
-    MESSAGE_INTERVAL,
-  );
-});
