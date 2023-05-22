@@ -4,9 +4,8 @@ const cron = require('node-cron');
 const client = require('../bot');
 
 cron.schedule(
-  '* * * * *',
+  '*/15 * * * *',
   () => {
-    console.log(process.env);
     sendMessageInterval(client);
   },
   {
