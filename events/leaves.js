@@ -17,6 +17,11 @@ module.exports = {
       );
       return;
     }
+    if (!member.joinedAt)
+      return await channel.send(
+        `**${member.displayName}** lahkus meie hulgast.`,
+      );
+
     const duration = Date.now() - member.joinedAt.getTime();
     await channel.send(
       `**${
