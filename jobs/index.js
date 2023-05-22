@@ -6,7 +6,7 @@ const client = require('../bot');
 cron.schedule(
   '* * * * *',
   () => {
-    console.log('hello');
+    console.log(process.env);
     sendMessageInterval(client);
   },
   {
