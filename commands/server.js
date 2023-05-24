@@ -29,7 +29,7 @@ module.exports = {
     );
 
     const onlineMembers = guild.members.cache.filter(
-      (member) => member.presence.status !== 'offline',
+      (member) => member.presence?.status !== 'offline',
     );
     const onlineCount = onlineMembers.size;
 
