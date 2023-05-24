@@ -27,13 +27,13 @@ module.exports = {
       },
     );
 
-    const onlineMembers = guild.members.cache.filter(
-      (member) => member.presence?.status !== 'offline',
+    const onlineMembers = guild.members.cache.map((member) =>
+      console.log(`ALGUS ${member.displayName} - ${member.presence?.status}`),
     );
     const onlineCount = onlineMembers.size;
 
     const invisibleMembers = guild.members.cache.filter(
-      (member) => member.presence?.status === 'online',
+      (member) => member.presence?.status === 'offline',
     );
     const invisibleCount = onlineCount - invisibleMembers.size;
 
