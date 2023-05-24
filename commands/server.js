@@ -11,7 +11,6 @@ module.exports = {
     const guild = interaction.guild;
     const getMemberCount = guild.memberCount;
     const getGuildLogo = guild.iconURL();
-    const getRolesCount = guild.roles.cache.size;
     const serverCreationDate = DateTime.fromJSDate(guild.createdAt)
       .setZone('Europe/Tallinn')
       .setLocale('et')
@@ -33,14 +32,19 @@ module.exports = {
     );
     const onlineCount = onlineMembers.size;
 
+    const invisibleMembers = guild.members.cache.filter(
+      (member) => member.presence?.status === 'online',
+    );
+    const invisibleCount = onlineCount - invisibleMembers.size;
+
     const embed = new EmbedBuilder()
       .setColor('#71368A')
       .setTitle('KOODIJUTUD')
       .setURL('https://koodijutud.ee/')
       .setThumbnail(getGuildLogo)
       .addFields({
-        name: `👥 **${getMemberCount} Kasutajat, 🟢 ${onlineCount} Online**`,
-        value: `** 🛠️ ${getRolesCount} Rolli **`,
+        name: `👥 **${getMemberCount} Kasutajat,**`,
+        value: `🟢 **${onlineCount} Online 🕵️(${invisibleCount} nähtamatut)**`,
       })
       .addFields({
         name: '🕙 ** Server Loodud** ',
