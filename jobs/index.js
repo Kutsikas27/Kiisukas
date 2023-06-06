@@ -57,8 +57,6 @@ const sendMessageInterval = async (client) => {
   }
 
   isFirstRunDone = true;
-
-  console.log(jobChannel);
 };
 process.on('unhandledRejection', (error) => {
   console.error('Unhandled promise rejection:', error);

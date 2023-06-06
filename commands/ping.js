@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const wait = require('node:timers/promises').setTimeout;
 const humanizeDuration = require('humanize-duration');
 
 module.exports = {
@@ -25,8 +24,5 @@ module.exports = {
         sent.createdTimestamp - interaction.createdTimestamp
       } ms** `,
     );
-
-    await wait(20000);
-    await interaction.deleteReply().catch((err) => console.log(err));
   },
 };
