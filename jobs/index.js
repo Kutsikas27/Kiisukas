@@ -30,11 +30,13 @@ const sendMessageToChannel = async (channel, job) => {
 };
 let isFirstRunDone = false;
 const jobOffers = [];
+const BOLT_ID = 3;
 
 const sendMessageInterval = async (client) => {
   const jobChannel = await client.channels.fetch(process.env.JOB_CHANNEL_ID);
   const { output: companies } = await getJobOfferings();
   for (const company of companies) {
+    if (company.id === BOLT_ID) continue;
     for (const job of company.jobs) {
       const currentJob = {
         company_name: company.name,
