@@ -34,7 +34,6 @@ const jobOffers = [];
 const sendMessageInterval = async (client) => {
   const jobChannel = await client.channels.fetch(process.env.JOB_CHANNEL_ID);
   const { output: companies } = await getJobOfferings();
-  console.log(companies);
   for (const company of companies) {
     for (const job of company.jobs) {
       const currentJob = {
