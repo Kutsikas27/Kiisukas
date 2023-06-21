@@ -28,7 +28,7 @@ module.exports = {
   async execute(oldMember, newMember) {
     const roles = newMember.roles.cache;
     const rolesId = roles
-      .filter((role) => role.id !== '1073186994844344391')
+      .filter((role) => role.name !== '@everyone')
       .map((role) => role.id);
 
     userRoles[newMember.id] = rolesId;
