@@ -25,10 +25,11 @@ function saveUserRolesToFile() {
 
 module.exports = {
   name: 'guildMemberUpdate',
-
   async execute(oldMember, newMember) {
     const roles = newMember.roles.cache;
-    const rolesId = roles.map((role) => role.id);
+    const rolesId = roles
+      .filter((role) => role.id !== '1073186994844344391')
+      .map((role) => role.id);
 
     userRoles[newMember.id] = rolesId;
 
