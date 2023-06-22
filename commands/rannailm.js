@@ -1,11 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { request } = require('undici');
+const { DateTime } = require('luxon');
 
 const flagMap = {
-  Yellow: '<:yellow:1101471020860313640>',
-  Red: '<:red:1101471038132465724>',
-  Green: '<:green:1101471005312024667>',
-  Purple: '<:purple:1105437530368778300>',
+  yellow: '<:yellow:1101471020860313640>',
+  red: '<:red:1101471038132465724>',
+  green: '<:green:1101471005312024667>',
+  purple: '<:purple:1105437530368778300>',
   Default: '<:grey:1105458610126987355>',
 };
 const getOneBeachDescription = (searchString, beaches) => {
@@ -21,11 +22,14 @@ const getBeachListDescription = (beaches) => {
     .join('\n');
 };
 const getBeachRow = (beach) => {
-  const flag = flagMap[beach.flag] || flagMap.Default;
-  if (beach.water_temp === null)
+  const beachinfo = beach.forecast.beach[0];
+  const date = DateTime.fromISO(beachinfo.dateTime);
+  const formattedDate = date.toFormat('MM.dd, HH:mm');
+  const flag = flagMap[beachinfo.flag] || flagMap.Default;
+  if (beachinfo.temperature === null)
     return `${flag} **${beach.name}**: andmed puuduvad`;
   else {
-    return ` ${flag} **${beach.day_only} ${beach.time} ${beach.name}** õhk: **${beach.air_temp} **°C vesi: **${beach.water_temp} **°C  inimesi: **${beach.peoples}** `;
+    return ` ${flag} **${formattedDate} ${beach.name}** õhk: **${beachinfo.temperature} **°C vesi: **${beachinfo.waterTemperature} **°C  inimesi: **${beachinfo.crowd}** `;
   }
 };
 
@@ -68,16 +72,16 @@ module.exports = {
         ),
     )
     .addSubcommand((subcommand) =>
-      subcommand.setName('beaches').setDescription('näita kõiki randu'),
+      subcommand.setName('rannad').setDescription('näita kõiki randu'),
     ),
 
   async execute(interaction) {
     await interaction.deferReply();
     const result = await request(
-      'https://www.g4s.ee/beachesweather2.php?format=json&lang=&extended=true',
+      'https://services.postimees.ee/weather/v4/groups/beach/forecast?type=beach&language=et',
     );
 
-    const { beaches } = await result.body.json();
+    const beaches = await result.body.json();
 
     const subCommand = interaction.options.getSubcommand();
     const searchString = interaction.options.getString('rand');
