@@ -23,13 +23,14 @@ const getBeachListDescription = (beaches) => {
 };
 const getBeachRow = (beach) => {
   const beachinfo = beach.forecast.beach[0];
-  const date = DateTime.fromISO(beachinfo.dateTime);
-  const formattedDate = date.toFormat('MM.dd, HH:mm');
+  const date = DateTime.fromISO(beachinfo.dateTime)
+    .setZone('Europe/Tallinn')
+    .toFormat('dd.MM HH:mm');
   const flag = flagMap[beachinfo.flag] || flagMap.Default;
   if (beachinfo.temperature === null)
     return `${flag} **${beach.name}**: andmed puuduvad`;
   else {
-    return ` ${flag} **${formattedDate} ${beach.name}** õhk: **${beachinfo.temperature} **°C vesi: **${beachinfo.waterTemperature} **°C  inimesi: **${beachinfo.crowd}** `;
+    return ` ${flag} **${date} ${beach.name}** õhk: **${beachinfo.temperature} **°C vesi: **${beachinfo.waterTemperature} **°C  inimesi: **${beachinfo.crowd}** `;
   }
 };
 
