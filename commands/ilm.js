@@ -48,15 +48,8 @@ module.exports = {
     );
 
     const { forecast } = await ilmResult.body.json();
-    const {
-      summary,
-      temperature,
-      apparentTemperature,
-      windSpeed,
-      dateTime,
-      icon,
-    } = forecast.currently[0];
-    const eestiAeg = new Date(dateTime).toLocaleString('et-EE');
+    const { summary, temperature, apparentTemperature, windSpeed, icon } =
+      forecast.currently[0];
     const embed = new EmbedBuilder()
       .setColor(0xefff00)
       .setTitle(`${getDescription} ${getWeatherEmoji(icon)}`)
@@ -64,10 +57,7 @@ module.exports = {
         `${summary}, **${Math.round(temperature)}°C** (tajutav **${Math.round(
           apparentTemperature,
         )}°C**), tuulekiirus **${Math.round(windSpeed)} m/s**`,
-      )
-      .setFooter({
-        text: `Aeg ${eestiAeg}`,
-      });
+      );
 
     interaction.followUp({ embeds: [embed] });
   },
