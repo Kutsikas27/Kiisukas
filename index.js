@@ -41,3 +41,6 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args));
   }
 }
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled promise rejection:', error);
+});
