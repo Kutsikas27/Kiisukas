@@ -10,7 +10,7 @@ module.exports = {
       .toFormat('dd.MM HH:mm');
 
     console.log(uptime);
-    client.user.setActivity(`online since ${uptime}`, {
+    client.user.setActivity(`since ${uptime}`, {
       type: ActivityType.Playing,
     });
   },
