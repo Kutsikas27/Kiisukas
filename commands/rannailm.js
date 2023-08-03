@@ -24,11 +24,11 @@ const choices = [
 ].map((e) => ({ name: e, value: e }));
 
 const flagMap = {
-  yellow: '<:yellow:1101471020860313640>',
-  red: '<:red:1101471038132465724>',
-  green: '<:green:1101471005312024667>',
-  purple: '<:purple:1105437530368778300>',
-  Default: '<:grey:1105458610126987355>',
+  yellow: '<:yellow:1136634248904851627>',
+  red: '<:red:1136634224464646174>',
+  green: '<:green:1136634168474873888>',
+  purple: '<:purple:1136634234178646136>',
+  Default: '<:grey:1136634185528901672>',
 };
 const getOneBeachDescription = (searchString, beaches) => {
   const beach = beaches.find((el) => el.name === searchString);

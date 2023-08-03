@@ -36,10 +36,10 @@ module.exports = {
         const marketChangeRounded =
           Math.round(item.regularMarketChangePercent * 100) / 100;
 
-        let emoji = '<:green:1101471005312024667>';
+        let emoji = '<:green:1136634168474873888>';
 
-        if (marketChangeRounded === 0) emoji = '<:yellow:1101471020860313640>';
-        if (marketChangeRounded < 0) emoji = '<:red:1101471038132465724>';
+        if (marketChangeRounded === 0) emoji = '<:yellow:1136634248904851627>';
+        if (marketChangeRounded < 0) emoji = '<:red:1136634224464646174>';
 
         return `${emoji}  ${item.shortName} • **${marketChangeRounded}** %`;
       })

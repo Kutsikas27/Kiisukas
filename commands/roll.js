@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 const diceEmojis = [
-  '<:dicesixfacesone:1072469898762129409>',
-  '<:dicesixfacestwo:1072470179956658176>',
-  '<:dicesixfacesthree:1072470415324225596>',
-  '<:dicesixfacesfour:1072470432894173276>',
-  '<:dicesixfacesfive:1072470449767862362>',
-  '<:dicesixfacessix:1072470465718800515>',
+  '<:dicesixfacesone1:1136634862435057675>',
+  '<:dicesixfacestwo:1136635283543162890>',
+  '<:dicesixfacesthree:1136635295605989376>',
+  '<:dicesixfacesfour:1136635306448265276>',
+  '<:dicesixfacesfive:1136635314761371709>',
+  '<:dicesixfacessix:1136635330041233489>',
 ];
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
